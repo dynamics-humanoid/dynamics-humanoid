@@ -1,0 +1,813 @@
+<!-- 
+  @Author: Your name
+  @Date:   2023-02-22 13:21:24
+  @Last Modified by:   Your name
+  @Last Modified time: 2023-03-15 19:47:18
+-->
+<!DOCTYPE html>
+<html lang="" xml:lang="" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-KZEKLLQP31");
+    </script>
+
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>SuperDyno: Scalable Humanoid Whole-Body Control via Differentiable Neural Network Dynamics</title>
+    <meta content="SuperDyno" property="og:title" />
+    <meta content="" name="description" property="og:description" />
+    <meta name="keywords" content="Humanoid Control" />
+
+    <link rel="stylesheet" href="assets/css/project_stylesheet.css" />
+    <link href="../data/misc/favicon.ico" rel="shortcut icon" />
+    <link href="../data/misc/favicon_apple.ico" rel="apple-touch-icon" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/fontawesome.all.min.css" />
+    <link rel="stylesheet" href="assets/academicons/css/academicons.min.css" />
+
+    <script defer src="assets/js/fontawesome.all.min.js"></script>
+    <script src="assets/js/iframeResizer.contentWindow.min.js"></script>
+  </head>
+
+  <body>
+    <div class="n-header"></div>
+    <div class="n-title">
+      <h1>SuperDyno: Scalable Humanoid Whole-Body Control via Differentiable Neural Network Dynamics</h1>
+    </div>
+
+    <ul class="authors">
+      <li>
+        <a style="font-size: 25px" target="_blank "
+          >Paper ID: 15294 -- Rebuttal & Supplementary Materials</a
+        >
+      </li>
+    </ul>
+
+
+    <div class="n-article">
+    <hr />
+    <p>
+        <ol>
+
+            <li><a href="#Comparion with Differentiable Simulators?">Why Not Directly Differentiable Simulators?</a></li>  
+            <ul>
+              <li><a href="#Case Study">Illustrative Case Study</a></li>
+              <li><a href="#Pros">Advantages</a></li>
+              <li><a href="#Cons">Disadvantages & Limitations</a></li>
+            </ul>
+
+            <li><a href="#more comparsion">More Comparison with Baselines and SOTA</a></li>
+
+            <li><a href="#dynamics model">Evaluation on Dynamics Models</a></li>
+
+            <li><a href="#policy evaluation">Dense/Sparse Reward Task Evaluation</a></li>
+            <ul>
+                <li><a href="#amass_imitation">AMASS Train & Test</a></li>
+                <li><a href="#amass_phc">Comparison with SOTA</a></li>
+                <li><a href="#sparse reward">Sparse Reward Tasks </a></li>
+            </ul>
+
+            <li><a href="#transfer learning">Transfer Learning</a></li>
+            <ul>
+                <li><a href="#task transfer">Task-level Transfer Learning</a></li>
+                <li><a href="#dynamics transfer">Environment-level Transfer Learning</a></li>
+            </ul>
+            
+            <li><a href="#scaling law">Dynamics Scaling</a></li>
+        </ol>
+
+    </p>
+    <hr />
+
+    
+
+
+    <h2 id = "mocap_motion_imitation">MoCap Motion Imitation</h2>
+    <p>In this section, we visualize PHC's ability to imitate high-quality motion capture (MoCap) data on both seen and and unseen sequences during training. All rendered SMPL mesh (bottom left) is produced using simulation result without any post-processing. </p>
+    <h3 id = "amass_imitation">AMASS Train & Test</h3>
+
+      <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-bottom: 20px;
+        "
+      >
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/amass/amass1.mp4#t=0.001"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/amass/amass2.mp4#t=0.001"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/amass/amass3_test.mp4#t=0.001"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+
+          <tr class="block_videos_caption">
+            <td>
+              <center>AMASS-Train-Belly dancing</center>
+            </td>
+            <td>
+              <center>AMASS-Train-Simple movement</center>
+            </td>
+            <td>
+              <center>AMASS-Test</center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <h3 id = "amass_uhc">Comparison with SOTA</h3>
+
+       <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-bottom: 20px;
+        "
+      >
+
+        <tbody>
+            <tr class="block_videos">
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/uhc/UHC-AMASS.mp4#t=0.001"
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+
+                
+                <td width="50%">
+                        Here we compare the motion imitation capability of our controller with the state-of-the-art model, the universal humanoid controller (UHC). We use the mesh-based humanoid and rotation-based imitator for a fair comparison. We compare with UHC both with and without 
+                        residual force control (RFC). We can see that PHC's (without using RFC) performance is on-par with UHC with RFC, while UHC without RFC exhibits jittery motion and falls. 
+                </td>
+            </tr>
+
+        </tbody>
+      </table>
+
+
+       <h3 id = "amass_imitation">Shape Variation</h3>
+    <p>
+                PHC can be trained to controller humanoids of different body shape. Here we showcase 16 humanoids simulated with different gender (red: female; blue: male) and body proportions. Red spheres indicate reference motion's joint position and color gradient indicates weight.
+    </p>
+      <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-bottom: 20px;
+        "
+      >
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/recover/Shape.mp4"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/recover/far_walk_out.mp4"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+
+
+          <tr class="block_videos_caption">
+            <td>
+              <center>Motion imitation with various body shapes</center>
+            </td>
+            <td>
+              <center>Fail-state recovery with various body shapes. Inter-humanoid collision is disabled.</center>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+
+       <h3 id = "fail_fit">Hard/Failure Cases & Overfitting</h3>
+       <p>
+        Here we showcase PHC's ability to imitate dynamic motion from AMASS such as high jumps, spinkicks, and cartwheeling. Failure cases include backflips, running-the-high-jump, etc. Notice that while a multi-clip PHC struggle to imitate these motion, 
+       we can overfit to them (last video)
+       </p>
+       
+       
+
+       <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-bottom: 20px;
+        "
+      >
+
+        <tbody>
+            <tr class="block_videos">
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/amass/amass_hard.mp4#t=0.001"
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/failfit/failcases.mp4#t=0.001"
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+
+                
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/failfit/overfit.mp4#t=0.001"
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+            </tr>
+
+             <tr class="block_videos_caption">
+            <td>
+              <center>Hard motion</center>
+            </td>
+            <td>
+              <center>Failure cases</center>
+            </td>
+            <td>
+              <center>Overfitting to one clip</center>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+      <h2 id = "noisy_motion_imitation">Noisy Motion Imitation</h2>
+      <p>
+        Imitating motion estimated from monocular video or generated from language is significantly more challenging than imitating clean high-quality MoCap sequences. In this section, we showcase PHC's ability to imitate noisy motion and demonstrate real-time avatar use cases. 
+      </p>
+      <p style="color:Red;">
+        In this section, the red spheres/humanoid inside simulation indicates reference motion--the imitator's task is to track them.
+        </p>
+
+      <h3 id = "h36m_sota">Comparison with SOTA</h3>
+      <p>
+        We run HybrIK on the test split of the H36M dataset to extract motion estimates. Motion estimated from video can have severe foot sliding, floating, and 
+        physically implausible poses. We post-process these estimated motion with Gaussian smoothing to improve their stability (not possible for real-time applications).
+        Here we showcase PHC's ability to imitate noisy motion and compare with the state-of-the-art, UHC. 
+        </p>
+     
+
+        <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/uhc/UHC-H36M.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/uhc/UHC-H36M-Hard.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+
+          <tr class="block_videos">
+            <td>
+              <center>Imitating motion estimated from H36M: a few clips is started and initialized with ill-formed pose estimate (1:24, 2:09), from which our PHC can quickly recover.   </center>
+            </td>
+            <td>
+              <center>Comparing fail-state recovery strategy: using kinematic pose to reset (0:05) can lead to a vicious cycle of reset-fall-reset when the kinematic pose estimate is unreliable.</center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+        <h3 id = "video_avatar_single"> Real-time Single-person Avatar from Video </h3>
+
+      <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+        <tbody>
+            <tr class="block_videos">
+                <td width="70%">
+                    <p>Here we show PHC ability to imitate real-time and live pose estimates from free-formed videos. Both input 
+                    and physics simulation visualized in the video are live screen recordings (simulation can be seen on the captured monitor feed). We showcase both rotation-based and keypoint-based imitators. We uses rotation and keypoint estimates from 
+                    HybrIK and MeTRAbs, respectively. We find that MeTRAbs provides more stable depth estimates, so we mainly focus on using keypoint-based imitator paired with MeTRAbs. 
+                    
+                    We <b>do not reset</b> during any of the videos. Note that during live demonstration, both simulation and pose estimation have fluctuating framerate, which poses additional challenge to our imitator.   
+                    
+                    Slight delay between video input and simulation is caused by pose estimation latency. 
+                    
+                    Slight misalignment between rendered mesh and simulation is caused by discrepancy between simulation and screen recording framerate. 
+
+                    Red spheres indicate keypoints estimated from video (for HybrIK, we perform forward kinematics from estimated rotation. )
+                    </p>
+                </td>
+
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/video/single_hybrik.mp4#t=0.001"
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                <center style="font-size: 11px"> Rotation-based imitator + HybrIK </center>
+                </td>
+                
+            </tbody>
+
+    </table>
+     <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+        <tbody>
+            <tr class="block_videos">
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/video/single1.mp4#t=0.001 "
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/video/single2.mp4#t=0.001 "
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/video/single3.mp4#t=0.001 "
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+            </tr>
+                <tr class="block_videos_caption" >
+                    <td>
+                    <center>Keypoint-based imitator + MeTRAbs | Simple motion</center>
+                    </td>
+                    <td>
+                    <center>Keypoint-based imitator + MeTRAbs | Dynamic motion including jumping, crouching, single-leg standing, etc.</center>
+                    </td>
+                    <td>
+                    <center>Keypoint-based imitator + MeTRAbs | Dynamic motion including jumping rotate (0:30), human object interactions (2:11), missing person (2:30), etc.</center>
+                    </td>
+                </tr>
+            </tbody>
+    </table>
+
+
+   
+
+
+
+    <h3 id = "video_avatar_multiple"> Real-time Physics-based Multi-Person Interaction from Video </h3>
+
+    <p>We also showcase a multi-person scenarios, where we track two actors in the same scene. We uses our keypoint-based imitator and MeTRAbs for this demo. We also enable physically plausible human-to-human interaction
+        by turning on humanoid-to-humanoid collision. Note that in the multi-person case, occlusion and identity switch is common as can be seen in the flying keypoint estimates (red spheres).
+
+    </p>
+     <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+        <tbody>
+            <tr class="block_videos">
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/video/video_multi.mp4 "
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+                <td>
+                <video width="100%" height="auto" muted autoplay loop controls>
+                    <source
+                    src="videos/video/video_multi_interact.mp4"
+                    type="video/mp4 "
+                    />
+                    Your browser does not support the video tag.
+                </video>
+                </td>
+            </tr>
+                <tr class="block_videos_caption" >
+                    <td>
+                    <center>Simple motion</center>
+                    </td>
+                    <td>
+                    <center>Human-to-human interaction. At 2:01, the two humanoid gets entangled due to identity switch and later recovers. </center>
+                    </td>
+                    <td>
+                </tr>
+            </tbody>
+    </table>
+
+    <h3 id = "language_avatar_single">Avatars from Language - Single Clip</h3>
+    <p> We uses the motion diffusion model (MDM) to perform text-to-motion. Here we showcase imitating a single clip of motion. Since MDM natively output 3D keypoints, we use our keypoint-based imitator in this section.   </p>
+
+        <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/backwards.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/jump_high.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/kick.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+            <tr class="block_videos_caption" >
+                <td>
+                <center>"A person walks backwards."</center>
+                </td>
+                <td>
+                <center>"A person crouches down and then jumps up."</center>
+                </td>
+                <td>
+                <center>"A person kicks"</center>
+                </td>
+            </tr>
+
+        </tbody>
+
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/punch.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/rope.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/turn.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+          <tr class="block_videos_caption" >
+                <td>
+                    <center>"A person punches in a manner consistent with martial arts."</center>
+                </td>
+                <td>
+                    <center>"A person is skipping rope."</center>
+                </td>
+                <td>
+                    <center>"A person turns to his right and paces back and forth."</center>
+                </td>
+            </tr>
+        </tbody>
+
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/pickup.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/jump_up_down.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/throw.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+          <tr class="block_videos_caption" >
+                <td>
+                    <center>"A person walks forward, bends down to pick something up off the ground. "</center>
+                </td>
+                <td>
+                    <center>"A person jumps up and down."</center>
+                </td>
+                <td>
+                    <center>"A throws a ball."</center>
+                </td>
+            </tr>
+        </tbody>
+        
+    </table>
+
+    <h3 id = "language_avatar_multiple">Avatars from Language - Multiple Clips</h3>
+
+    <p> We can chain up independently generated motion clips and uses PHC for motion inbetweening. For each generated clip from text, we pads it by repeating the first frame 30 times to allow PHC time to react.   </p>
+    <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+
+         <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/multi1.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/multi2.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/language/multi3.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+          <tr class="block_videos_caption" >
+                <td>
+                    <center>"A person waves."</center>
+                    <center>"A person crouches down to pick up an object."</center>
+                    <center>"A person is very happy and flops onto the ground."</center>
+                </td>
+                <td>
+                    <center>"A person kicks up."</center>
+                    <center>"A person talks on the phone."</center> 
+                    <center>"A person sits down to the ground. "</center>
+
+                </td>
+                <td>
+                    <center>"A person walks forward while rasing hands."</center> 
+                    <center>"A person is dancing."</center> 
+                    <center>"A person is standing on one leg."</center> 
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+    <h2 id = "fail_recovery">Fail-state Recovery</h2>
+    <p>Here we visualize our PHC's ability to recover from fail-state. We study fall-state, far-state, and fall+far states. PHC can get up and walk back to far away reference motion (> 5m, no upper limit) and resumes motion imitation. 
+        Red spheres indicates reference motion. 
+
+    </p>
+      
+
+          <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-botto: 20px;
+        "
+      >
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/recover/Fall.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/recover/Far.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/recover/Fall_and_far.mp4#t=0.001 "
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+
+          </tr>
+
+          <tr class="block_videos">
+            <td>
+              <center>Fall-state</center>
+            </td>
+            <td>
+              <center>Far-state, including > 5 m (0:45) </center>
+            </td>
+            <td>
+              <center>Fall+far state </center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+    </div>
+  </body>
+</html>
