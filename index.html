@@ -65,6 +65,7 @@
 
             <li><a href="#Comparion with Differentiable Simulators?">Why Neural Network?</a></li>  
             <ul>
+              <li><a ref="#Compare with DS">Policy Performance Comparison</a></li>
               <li><a href="#Case Study">Case Study: Ball-Wall Experiment</a></li>
               <li><a href="#Pros and Cons">Advantages & Limitations</a></li>
               <li><a href="#Evidence">Connecting with Choice of Activation Function</a></li>
@@ -99,6 +100,64 @@
       In this section, we start from a case study of ball-wall experiment to illustrate why we choose neural network dynamics over differentiable simulators. 
       We then discuss the advantages and disadvantages of neural network dynamics from future applications and limitations.
     </p>
+    <h3 id = "Compare with DS">Policy Performance Comparison</h3>
+    <table
+        style="
+          width: 100%;
+          border: 0px;
+          border-spacing: 5px 0px;
+          border-collapse: separate;
+          margin-right: auto;
+          margin-left: auto;
+          padding-bottom: 20px;
+        "
+      >
+        <tbody>
+          <tr class="block_videos">
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/video/output_kinematics.mp4"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/video/output_trot_apg_nolastact.mp4"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+            <td>
+              <video width="100%" height="auto" muted autoplay loop controls>
+                <source
+                  src="videos/video/output_superdyno1.mp4#t=0.001"
+                  type="video/mp4 "
+                />
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+
+          <tr class="block_videos_caption">
+            <td>
+              <center>reference motion</center>
+            </td>
+            <td>
+              <center>with gradients from MJX </center>
+            </td>
+            <td>
+              <center>with gradients from Neural Networks </center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
     <h3 id = "Case Study">Case Study: Ball-wall experiment</h3>
     <p>
       As shown by the figure below, consider a simplified ball-wall experiment: a point mass (ball) being launched forward on the ground, at a velocity \(v\). Other problem related 
